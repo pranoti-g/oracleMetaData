@@ -1,0 +1,14 @@
+
+
+config:
+  queries:
+    reportMetadata: " select * from metadata where reportid={REPORT_ID}";
+    dqRules: "select * from dqrules where reportid={REPORT_ID}"
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_example
+    username: springuser
+    password: ThePassword
+    driver-class-name: "com.mysql.jdbc.Driver"
+
