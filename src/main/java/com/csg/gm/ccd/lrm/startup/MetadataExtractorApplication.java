@@ -8,7 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @Slf4j
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages={"com.csg.gm.ccd.lrm"})
 public class MetadataExtractorApplication implements CommandLineRunner {
     @Autowired
     MetadataExtractorService metadataExtractorService;
@@ -27,10 +27,11 @@ public class MetadataExtractorApplication implements CommandLineRunner {
             throw new IllegalArgumentException(errorMessage);
         }
 
-        String metadataTable=args[0];
-        String arguments=args[1];
+        String queryName=args[0];
+        String arguments= args[1];
 
-        metadataExtractorService.extractMetadata(metadataTable,arguments);
+
+        metadataExtractorService.extractMetadata(queryName,arguments);
 
 
     }

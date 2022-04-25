@@ -1,10 +1,7 @@
 package com.csg.gm.ccd.lrm.service;
 
 import com.csg.gm.ccd.lrm.dao.MetadataDao;
-import com.csg.gm.ccd.lrm.utils.MetadataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -12,16 +9,18 @@ import java.util.Map;
 import static com.csg.gm.ccd.lrm.utils.MetadataUtils.metadataMapToString;
 import static com.csg.gm.ccd.lrm.utils.MetadataUtils.saveToFile;
 
-@Component
+@Service
 public class MetadataExtractorService {
     @Autowired
     MetadataDao metadataDao;
 
-    public void extractMetadata(String metadataTable, String arguments) {
-        Map<String,String> metadataInfo=metadataDao.getMetadataForTable(metadataTable,arguments);
-        StringBuilder insertStatementsAsString= metadataMapToString(metadataInfo);
-        String path="";
-        saveToFile(path,insertStatementsAsString);
+    public void extractMetadata(String queryName, String arguments) {
+        Map<String, String> metadataInfo=metadataDao.getMetadataForTable(queryName,arguments);
+        System.out.println(metadataInfo);
+        StringBuilder insertStatementsAsString= metadataMapToString(metadataInfo,queryName);
+        System.out.println(insertStatementsAsString);
+        String path= "C:\\software\\jdbcImpala\\";
+        saveToFile(path,insertStatementsAsString,queryName);
 
     }
 
