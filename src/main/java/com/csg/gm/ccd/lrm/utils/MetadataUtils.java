@@ -1,5 +1,6 @@
 package com.csg.gm.ccd.lrm.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -12,6 +13,7 @@ import java.sql.ResultSetMetaData;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class MetadataUtils {
 
@@ -20,33 +22,26 @@ public class MetadataUtils {
 
     public static StringBuilder metadataMapToString(Map<String, String> metadataInfo, String queryName) {
         StringBuilder insertStatement = null;
-        String[] columnNameArray = metadataInfo.keySet().toArray(new String[0]);
-        String[] columnValueArray = metadataInfo.values().toArray(new String[0]);
 
+        StringBuilder columnNameString = new StringBuilder();
+        StringBuilder valueString = new StringBuilder();
 
+        metadataInfo.entrySet().forEach(entry->{
+            columnNameString.append(entry.getKey()+",");
+            valueString.append("'"+entry.getValue()+"',");
+        });
 
-        StringBuilder columnName = new StringBuilder();
-        StringBuilder columnValue = new StringBuilder();
-        for(int i=0;i< columnNameArray.length;i++){
-            if(i==((columnNameArray.length)-1)){
-                columnName.append(columnNameArray[i] );
-                columnValue.append("'"+columnValueArray[i]+"'");
-            }else {
+        columnNameString.deleteCharAt(columnNameString.length()-1);
+        valueString.deleteCharAt(valueString.length()-1);
 
-                columnName.append(columnNameArray[i] + ",");
-                columnValue.append("'"+columnValueArray[i] + "',");
-            }
-        }
-        System.out.println("Column Name:"+ columnName);
-        System.out.println("Column Value:"+ columnValue);
         if (queryName.equals("reportMetadata")) {
             insertStatement = new StringBuilder("insert into matric_metadata (" );
-            insertStatement.append(columnName).append(")values(").append(columnValue)
+            insertStatement.append(columnNameString).append(")values(").append(valueString)
                     .append(");");
 
         } else if (queryName.equalsIgnoreCase("dqrules")) {
            insertStatement = new StringBuilder("insert into dqrules (" );
-            insertStatement.append(columnName).append(")values(").append(columnValue)
+            insertStatement.append(columnNameString).append(")values(").append(valueString)
                     .append(");");
 
         }
@@ -87,9 +82,9 @@ public class MetadataUtils {
         File myObj = new File(path);
         try {
             if (myObj.createNewFile()) {
-                System.out.println("File created: " + myObj.getName());
+               log.info("File created: " + myObj.getName());
             } else {
-                System.out.println("File already exists.");
+               log.info("File already exists.");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -106,11 +101,8 @@ public class MetadataUtils {
     }
 
     public String ConvertSqlStmt(String query){
-        System.out.println("In the Convert: "+query);
         String[] sql =query.split("=", 2);
-        System.out.println(sql[0]);
         query=sql[0]+"=?";
-        System.out.println(query);
         return query;
     }
 }

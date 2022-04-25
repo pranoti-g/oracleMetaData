@@ -16,9 +16,7 @@ public class MetadataExtractorService {
 
     public void extractMetadata(String queryName, String arguments) {
         Map<String, String> metadataInfo=metadataDao.getMetadataForTable(queryName,arguments);
-        System.out.println(metadataInfo);
         StringBuilder insertStatementsAsString= metadataMapToString(metadataInfo,queryName);
-        System.out.println(insertStatementsAsString);
         String path= "C:\\software\\jdbcImpala\\";
         saveToFile(path,insertStatementsAsString,queryName);
 
