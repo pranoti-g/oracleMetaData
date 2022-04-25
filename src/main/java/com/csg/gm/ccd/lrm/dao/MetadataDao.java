@@ -1,5 +1,6 @@
 package com.csg.gm.ccd.lrm.dao;
 
+import com.csg.gm.ccd.lrm.utils.MetadataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,8 +16,9 @@ import java.util.Map;
 @Component
 public class MetadataDao {
 
+
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private MetadataUtils metadataUtils;
 
     @Value("${config.queries.reportMetadata}")
     private String reportMetadata;
@@ -28,39 +30,12 @@ public class MetadataDao {
     public Map<String, String> getMetadataForTable(String queryName, String arguments) {
         System.out.println(reportMetadata + ":" + arguments);
         if (queryName.equalsIgnoreCase("reportMetadata")) {
-
-            return jdbcTemplate.queryForObject(reportMetadata, new Object[]{arguments}, (rs, rowNum) -> {
-                Map<String, String> resultSet = new HashMap<>();
-                ResultSetMetaData metaData = rs.getMetaData();
-                int colsLen = metaData.getColumnCount();
-                for (int i = 0; i < colsLen; i++){
-                    String columnName = metaData.getColumnName(i + 1);
-                    String columnValue = String.valueOf(rs.getObject(columnName));
-                    resultSet.put(columnName, columnValue);
-                }
-                    return resultSet;
-                    }
-            );
+            return  metadataUtils.getResultSetFromTable(reportMetadata,arguments);
         } else if (queryName.equalsIgnoreCase("dqrules")){
 
-            return jdbcTemplate.queryForObject(dqRules, new Object[]{arguments}, (rs, rowNum) -> {
-                        Map<String, String> resultSet = new HashMap<>();
-                        ResultSetMetaData metaData = rs.getMetaData();
-                        int colsLen =metaData.getColumnCount();
-                        for (int i = 0; i < colsLen; i++){
-                            String columnName = metaData.getColumnName(i + 1);
-                            String columnValue = String.valueOf(rs.getObject(columnName));
-                            resultSet.put(columnName, columnValue);
-                        }
-                System.out.println(resultSet);
-                        return resultSet;
-
-                    }
-            );
-
-
+            return  metadataUtils.getResultSetFromTable(dqRules,arguments);
         }else {
             return null;
         }
     }
-    }
+}
