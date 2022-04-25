@@ -29,13 +29,17 @@ public class MetadataDao {
 
     public Map<String, String> getMetadataForTable(String queryName, String arguments) {
         System.out.println(reportMetadata + ":" + arguments);
+
         if (queryName.equalsIgnoreCase("reportMetadata")) {
+           reportMetadata = metadataUtils.ConvertSqlStmt(reportMetadata);
             return  metadataUtils.getResultSetFromTable(reportMetadata,arguments);
         } else if (queryName.equalsIgnoreCase("dqrules")){
-
+            dqRules = metadataUtils.ConvertSqlStmt(dqRules);
             return  metadataUtils.getResultSetFromTable(dqRules,arguments);
         }else {
             return null;
         }
     }
+
+
 }

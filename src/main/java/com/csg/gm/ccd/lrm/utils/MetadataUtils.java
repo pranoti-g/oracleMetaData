@@ -104,4 +104,13 @@ public class MetadataUtils {
             e.printStackTrace();
         }
     }
+
+    public String ConvertSqlStmt(String query){
+        System.out.println("In the Convert: "+query);
+        String[] sql =query.split("=", 2);
+        System.out.println(sql[0]);
+        query=sql[0]+"=?";
+        System.out.println(query);
+        return query;
+    }
 }

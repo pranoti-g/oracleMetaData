@@ -2,8 +2,8 @@
 
 config:
   queries:
-    reportMetadata: " select * from matric_metadata where record_id=?"
-    dqRules: "select * from dqrules where record_id=?"
+    reportMetadata: " select * from matric_metadata where record_id={REPORT_ID}"
+    dqRules: "select * from dqrules where record_id={REPORT_ID}"
 
 spring:
   datasource:
